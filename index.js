@@ -4,11 +4,25 @@ class Debouncer {
 
     constructor() { 
         this.callbackToCheck;
+        this.helper;
     }
+    run(callback) {
+        if(!this.callbackToCheck)
+        {
+            clearTimeout(this.callbackToCheck);
+            this.callbackToCheck = setTimeout(callback,1000);
+        }
+            if((this.callbackToCheck._onTimeout != callback) && !(this.callbackToCheck._called))
+            {
+                clearTimeout(this.helper);
+                this.helper = setTimeout(callback,1000);
+            }
+            else
+            {
+                clearTimeout(this.callbackToCheck);
+                this.callbackToCheck = setTimeout(callback,1000);
 
-    run(callback) { 
-        clearTimeout(this.callbackToCheck);
-        this.callbackToCheck = setTimeout(callback);
+            }
     }
   }
   // -- Tests --
@@ -51,7 +65,6 @@ class Debouncer {
         debouncer.run(bumpCounter4)
         debouncer.run(bumpCounter4)
         await sleep(1500)
-        console.log(counter3)
         assert.equal(counter3, 1, "bumpCounter3 should have ran 1 time.")
         assert.equal(counter4, 1, "bumpCounter4 should have ran 1 time.")
       }
